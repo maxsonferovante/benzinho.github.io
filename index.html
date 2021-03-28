@@ -1,0 +1,161 @@
+<html>
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title>Cronômetro da Saudade</title>
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+
+			
+			<script src="https://code.jquery.com/jquery-1.11.2.js"></script>
+			<script type="text/javascript">
+				jQuery(window).load(function($){
+					atualizaRelogio();
+				});
+			</script>
+			<style>
+				p {
+					color:  #993399 ;
+				}
+				
+				body{
+					background-color:#DEB887;
+				}
+			</style>
+		  </head>
+		<body >
+		<section class="section">
+			<div class="content has-text-centered">
+				<div>
+					<p id="data" style="font-family: 'arial black', 'avant garde'; font-size: 24px;"></p>
+					<p id="dia" style="font-family: 'arial black', 'avant garde'; font-size: 24px;"></p>
+					<p id="hora" style="font-family: 'arial black', 'avant garde'; font-size: 24px;"></p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;">exagerando mais, um pouco mais,</p>
+					<p id="seg" style="font-family: 'arial black', 'avant garde'; font-size: 24px;"></p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;">para que possamos caminhar</p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;">de mãos dadas por todos os cosmos</p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;"> e possamos sentir o cheirinho do outro,</p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;">além de podemos trocar carinhos <em>infinitamente</em> ,</p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;">não tendo nenhum decreto violado,</p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;">nem bom senso contrariado.</p>
+					<p style="font-family: 'arial black', 'avant garde'; font-size: 24px;">mas, enquanto isso,</p>
+					<p id="repetir" style="font-family: 'arial black', 'avant garde'; font-size: 24px;">ouça sua versão preferida de <em>Onde Anda Você</em> </p>
+				</div>
+				<div>
+					<p id="repetir" style="font-family: 'arial black', 'avant garde'; font-size: 24px;"></p>
+					<audio id="player" preload="auto"  controls="controls">
+						<source src="music.mp3" type="audio/mp3" />
+					</audio>
+				</div>
+
+
+			<!-- 	<div>
+					<output id="hora" style="font-family: 'arial black', 'avant garde'; font-size: 24px;"></output>				
+				</div>	
+ -->
+				<div>
+					
+				</div>
+
+				<!-- https://open.spotify.com/track/7cMfD8KMlFQjTH93BCRo4w?si=9845c8378f334cd7 -->
+			</div>
+		</section>
+
+		</body>
+
+		<script>
+				 (function(){
+
+							/**
+							 * Ajuste decimal de um número.
+							 *
+							 * @param	{String}	type	O tipo de arredondamento.
+							 * @param	{Number}	value	O número a arredondar.
+							 * @param	{Integer}	exp		O expoente (o logaritmo decimal da base pretendida).
+							 * @returns	{Number}			O valor depois de ajustado.
+							 */
+							function decimalAdjust(type, value, exp) {
+								// Se exp é indefinido ou zero...
+								if (typeof exp === 'undefined' || +exp === 0) {
+									return Math[type](value);
+								}
+								value = +value;
+								exp = +exp;
+								// Se o valor não é um número ou o exp não é inteiro...
+								if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+									return NaN;
+								}
+								// Transformando para string
+								value = value.toString().split('e');
+								value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+								// Transformando de volta
+								value = value.toString().split('e');
+								return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+							}
+
+							// Arredondamento decimal
+							if (!Math.round10) {
+								Math.round10 = function(value, exp) {
+									return decimalAdjust('round', value, exp);
+								};
+							}
+							// Decimal arredondado para baixo
+							if (!Math.floor10) {
+								Math.floor10 = function(value, exp) {
+									return decimalAdjust('floor', value, exp);
+								};
+							}
+							// Decimal arredondado para cima
+							if (!Math.ceil10) {
+								Math.ceil10 = function(value, exp) {
+									return decimalAdjust('ceil', value, exp);
+								};
+							}
+
+				})();
+				function atualizaRelogio(){ 
+				var fimLockDown = new Date("2021-03-29 21:00");
+				var momentoAtual = new Date();
+				
+				var vhora = momentoAtual.getHours();
+				var vminuto = momentoAtual.getMinutes();
+				var vsegundo = momentoAtual.getSeconds();
+				
+				var vdia = momentoAtual.getDate();
+				var vmes = momentoAtual.getMonth() + 1;
+				var vano = momentoAtual.getFullYear();
+				
+				const diff  = Math.abs(
+					fimLockDown.getTime() - momentoAtual.getTime()
+					);
+				const dia = Math.ceil(
+					diff/(1000*60*60*24)
+				);
+				const hora = Math.ceil(
+					diff/(1000*60*60)
+				);
+				const seg = Math.ceil(
+					diff/(1000)
+				);
+
+				// console.log(seg);
+
+				if (vdia < 10){ vdia = "0" + vdia;}
+				if (vmes < 10){ vmes = "0" + vmes;}
+				if (vhora < 10){ vhora = "0" + vhora;}
+				if (vminuto < 10){ vminuto = "0" + vminuto;}
+				if (vsegundo < 10){ vsegundo = "0" + vsegundo;}
+
+				dataFormat = vdia + " de março de " + vano;
+				horaFormat = vhora + " : " + vminuto + " : " + vsegundo;
+
+				document.getElementById("data").innerHTML = "Hoje é "+dataFormat+",";
+				document.getElementById("dia").innerHTML = "faltam exatamente "+ dia+" dia,";
+				document.getElementById("hora").innerHTML = "ou melhor, "+hora+" horas,";
+				document.getElementById("seg").innerText = "faltam "+seg+" segundos, ";
+				document.getElementById("repetir"). innerText = Math.round10((diff/(1000))/138,0)+" vezes";
+				//document.getElementById("hora").innerHTML = horaFormat;
+
+				setTimeout("atualizaRelogio()",1000);
+			}
+		</script>	
+</html>
